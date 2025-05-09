@@ -1,10 +1,11 @@
 import 'package:traktx/traktx.dart';
 
 void main() async {
-  var trakt = Trakt(clientId: "YOUR-CLIENT-ID");
+  var trakt = Trakt(
+    clientId: "YOUR-CLIENT-ID",
+    clientSecret: "YOUR-CLIENT-SECRET",
+    redirectUri: "urn:ietf:wg:oauth:2.0:oob",
+  );
 
-  final certs = await trakt.networks.list();
-  for (var cert in certs) {
-    print("${cert.name}: ${cert.country}");
-  }
+  print(trakt.oauth.buildOauthRedirectUrl());
 }
