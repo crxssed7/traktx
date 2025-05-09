@@ -8,8 +8,11 @@ class NetworksService {
 
   NetworksService(this._client);
 
-  Future<List<Network>> list() async {
-    final response = await _client.get('/networks');
+  Future<List<Network>> list({int page = 1, int limit = 10}) async {
+    final response = await _client.get(
+      '/networks',
+      query: {'page': page, 'limit': limit},
+    );
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((network) => Network.fromJson(network)).toList();
   }
