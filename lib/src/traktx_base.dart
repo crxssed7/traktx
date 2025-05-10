@@ -1,4 +1,7 @@
+import 'package:traktx/src/services/calendars_service.dart';
 import 'package:traktx/src/services/certifications_service.dart';
+import 'package:traktx/src/services/checkin_service.dart';
+import 'package:traktx/src/services/comments_service.dart';
 import 'package:traktx/src/services/countries_service.dart';
 import 'package:traktx/src/services/device_service.dart';
 import 'package:traktx/src/services/genres_service.dart';
@@ -13,7 +16,10 @@ class Trakt {
 
   late final OauthService oauth;
   late final DeviceService device;
+  late final CalendarsService calendars;
+  late final CheckinService checkin;
   late final CertificationsService certifications;
+  late final CommentsService comments;
   late final CountriesService countries;
   late final GenresService genres;
   late final LanguagesService languages;
@@ -25,10 +31,14 @@ class Trakt {
     required String clientId,
     required String clientSecret,
     required String redirectUri,
-  }) : _client = Client(clientId, clientSecret, redirectUri) {
+    bool staging = false,
+  }) : _client = Client(clientId, clientSecret, redirectUri, staging) {
     oauth = OauthService(_client);
     device = DeviceService(_client);
+    calendars = CalendarsService(_client);
+    checkin = CheckinService(_client);
     certifications = CertificationsService(_client);
+    comments = CommentsService(_client);
     countries = CountriesService(_client);
     genres = GenresService(_client);
     languages = LanguagesService(_client);

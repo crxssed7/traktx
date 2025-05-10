@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:traktx/src/core/client.dart';
-import 'package:traktx/src/core/constants.dart';
 import 'package:traktx/src/models/auth_token.dart';
 
 class OauthService {
@@ -10,7 +9,7 @@ class OauthService {
   OauthService(this._client);
 
   String buildOauthRedirectUrl() {
-    var url = baseUrl.replaceFirst('api.', '');
+    var url = _client.base.replaceFirst('api.', '');
     url = url.replaceFirst('api-', '');
     return '$url/oauth/authorize?client_id=${_client.clientId}&redirect_uri=${_client.redirectUri}&response_type=code';
   }
