@@ -26,7 +26,6 @@ class Client {
     Map<String, String>? query,
   }) async {
     final uri = _buildUri(path, query);
-    print(uri);
     final response = await http.post(
       uri,
       headers: _headers(),

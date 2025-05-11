@@ -6,6 +6,7 @@ import 'package:traktx/src/services/countries_service.dart';
 import 'package:traktx/src/services/device_service.dart';
 import 'package:traktx/src/services/genres_service.dart';
 import 'package:traktx/src/services/languages_service.dart';
+import 'package:traktx/src/services/lists_service.dart';
 import 'package:traktx/src/services/networks_service.dart';
 import 'package:traktx/src/services/oauth_service.dart';
 
@@ -23,6 +24,7 @@ class Trakt {
   late final CountriesService countries;
   late final GenresService genres;
   late final LanguagesService languages;
+  late final ListsService list;
   late final NetworksService networks;
 
   String? _accessToken;
@@ -42,6 +44,7 @@ class Trakt {
     countries = CountriesService(_client);
     genres = GenresService(_client);
     languages = LanguagesService(_client);
+    list = ListsService(_client);
     networks = NetworksService(_client);
   }
 
