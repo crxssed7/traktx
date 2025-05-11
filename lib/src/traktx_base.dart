@@ -7,6 +7,7 @@ import 'package:traktx/src/services/device_service.dart';
 import 'package:traktx/src/services/genres_service.dart';
 import 'package:traktx/src/services/languages_service.dart';
 import 'package:traktx/src/services/lists_service.dart';
+import 'package:traktx/src/services/movies_service.dart';
 import 'package:traktx/src/services/networks_service.dart';
 import 'package:traktx/src/services/oauth_service.dart';
 
@@ -25,6 +26,7 @@ class Trakt {
   late final GenresService genres;
   late final LanguagesService languages;
   late final ListsService list;
+  late final MoviesService movies;
   late final NetworksService networks;
 
   String? _accessToken;
@@ -45,6 +47,7 @@ class Trakt {
     genres = GenresService(_client);
     languages = LanguagesService(_client);
     list = ListsService(_client);
+    movies = MoviesService(_client);
     networks = NetworksService(_client);
   }
 
