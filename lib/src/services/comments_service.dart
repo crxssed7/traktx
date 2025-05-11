@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:traktx/src/core/client.dart';
 import 'package:traktx/src/models/comment.dart';
-import 'package:traktx/src/requests/comment_movie_request.dart';
+import 'package:traktx/src/models/comment_item.dart';
+import 'package:traktx/src/models/user.dart';
+import 'package:traktx/src/requests/comment_create_request.dart';
 
 class CommentsService {
   final Client _client;
 
   CommentsService(this._client);
 
-  // TODO: Other request types
-  Future<Comment> post(CommentMovieRequest request) async {
+  Future<Comment> post(CommentCreateRequest request) async {
     final response = await _client.post('/comments', body: request.toJson());
     final Map<String, dynamic> raw = json.decode(response.body);
     return Comment.fromJson(raw);
@@ -58,5 +59,62 @@ class CommentsService {
     return Comment.fromJson(raw);
   }
 
-  // TODO: Other endpoints
+  Future<CommentItem> item(int id) async {
+    final response = await _client.get('/comments/$id/item');
+    final Map<String, dynamic> raw = json.decode(response.body);
+    return CommentItem.fromJson(raw);
+  }
+
+  Future<List<User>> likes(int id) async {
+    final response = await _client.get('/comments/$id/likes');
+    final List<dynamic> jsonList = json.decode(response.body);
+    return jsonList.map((raw) => User.fromJson(raw["user"])).toList();
+  }
+
+  Future<void> like(int id) async {
+    await _client.post('/comments/$id/like');
+  }
+
+  Future<void> unlike(int id) async {
+    await _client.delete('/comments/$id/like');
+  }
+
+  Future<List<CommentItem>> trending({
+    String? commentType,
+    String type = 'all',
+  }) async {
+    var path = '/comments/trending';
+    if (commentType != null) {
+      path = '$path/$commentType/$type';
+    }
+    final response = await _client.get(path);
+    final List<dynamic> jsonList = json.decode(response.body);
+    return jsonList.map((raw) => CommentItem.fromJson(raw)).toList();
+  }
+
+  Future<List<CommentItem>> recent({
+    String? commentType,
+    String type = 'all',
+  }) async {
+    var path = '/comments/recent';
+    if (commentType != null) {
+      path = '$path/$commentType/$type';
+    }
+    final response = await _client.get(path);
+    final List<dynamic> jsonList = json.decode(response.body);
+    return jsonList.map((raw) => CommentItem.fromJson(raw)).toList();
+  }
+
+  Future<List<CommentItem>> updates({
+    String? commentType,
+    String type = 'all',
+  }) async {
+    var path = '/comments/updates';
+    if (commentType != null) {
+      path = '$path/$commentType/$type';
+    }
+    final response = await _client.get(path);
+    final List<dynamic> jsonList = json.decode(response.body);
+    return jsonList.map((raw) => CommentItem.fromJson(raw)).toList();
+  }
 }

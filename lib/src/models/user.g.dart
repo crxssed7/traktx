@@ -9,9 +9,9 @@ part of 'user.dart';
 User _$UserFromJson(Map<String, dynamic> json) => User(
   username: json['username'] as String,
   private: json['private'] as bool,
-  name: json['name'] as String,
-  vip: json['vip'] as bool,
-  vipEp: json['vip_ep'] as bool,
+  name: json['name'] as String?,
+  vip: json['vip'] as bool? ?? false,
+  vipEp: json['vip_ep'] as bool? ?? false,
   ids: TraktIds.fromJson(json['ids'] as Map<String, dynamic>),
 );
 

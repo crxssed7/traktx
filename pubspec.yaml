@@ -1,7 +1,7 @@
 name: traktx
-description: A starting point for Dart libraries or applications.
+description: A Dart client library for the Trakt API.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/crxssed7/traktx
 
 environment:
   sdk: ^3.7.0

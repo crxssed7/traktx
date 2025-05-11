@@ -6,16 +6,17 @@ part 'user.g.dart';
 class User {
   final String username;
   final bool private;
-  final String name;
+  final String? name;
+  @JsonKey(defaultValue: false)
   final bool vip;
-  @JsonKey(name: 'vip_ep')
+  @JsonKey(name: 'vip_ep', defaultValue: false)
   final bool vipEp;
   final TraktIds ids;
 
   User({
     required this.username,
     required this.private,
-    required this.name,
+    this.name,
     required this.vip,
     required this.vipEp,
     required this.ids,
