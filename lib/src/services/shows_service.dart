@@ -2,84 +2,79 @@ import 'dart:convert';
 
 import 'package:traktx/src/core/client.dart';
 import 'package:traktx/src/models/alias.dart';
+import 'package:traktx/src/models/certification.dart';
 import 'package:traktx/src/models/comment.dart';
-import 'package:traktx/src/models/movie.dart';
+import 'package:traktx/src/models/episode.dart';
 import 'package:traktx/src/models/network.dart';
 import 'package:traktx/src/models/ratings.dart';
-import 'package:traktx/src/models/release.dart';
+import 'package:traktx/src/models/show.dart';
 import 'package:traktx/src/models/stats.dart';
 import 'package:traktx/src/models/translation.dart';
 import 'package:traktx/src/models/list.dart' as list;
 import 'package:traktx/src/models/user.dart';
 import 'package:traktx/src/models/video.dart';
 
-class MoviesService {
+class ShowsService {
   final Client _client;
 
-  MoviesService(this._client);
+  ShowsService(this._client);
 
   // TODO: Add wrapper classes
 
-  Future<List<Movie>> trending() async {
-    final response = await _client.get('/movies/trending');
+  Future<List<Show>> trending() async {
+    final response = await _client.get('/shows/trending');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> popular() async {
-    final response = await _client.get('/movies/popular');
+  Future<List<Show>> popular() async {
+    final response = await _client.get('/shows/popular');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie)).toList();
+    return jsonList.map((show) => Show.fromJson(show)).toList();
   }
 
-  Future<List<Movie>> favorited({String period = 'all'}) async {
-    final response = await _client.get('/movies/favorited/$period');
+  Future<List<Show>> favorited({String period = 'all'}) async {
+    final response = await _client.get('/shows/favorited/$period');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> mostPlayed({String period = 'all'}) async {
-    final response = await _client.get('/movies/played/$period');
+  Future<List<Show>> mostPlayed({String period = 'all'}) async {
+    final response = await _client.get('/shows/played/$period');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> mostWatched({String period = 'all'}) async {
-    final response = await _client.get('/movies/watched/$period');
+  Future<List<Show>> mostWatched({String period = 'all'}) async {
+    final response = await _client.get('/shows/watched/$period');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> mostCollected({String period = 'all'}) async {
-    final response = await _client.get('/movies/collected/$period');
+  Future<List<Show>> mostCollected({String period = 'all'}) async {
+    final response = await _client.get('/shows/collected/$period');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> anticipated() async {
-    final response = await _client.get('/movies/anticipated');
+  Future<List<Show>> anticipated() async {
+    final response = await _client.get('/shows/anticipated');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
-  Future<List<Movie>> boxoffice() async {
-    final response = await _client.get('/movies/boxoffice');
-    final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
-  }
-
-  Future<List<Movie>> updated({DateTime? startDate}) async {
-    var path = '/movies/updates';
+  Future<List<Show>> updated({DateTime? startDate}) async {
+    var path = '/shows/updates';
     if (startDate != null) {
       path = '$path/$startDate';
     }
     final response = await _client.get(path);
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie['movie'])).toList();
+    return jsonList.map((show) => Show.fromJson(show['show'])).toList();
   }
 
   Future<List<int>> updatedIds({DateTime? startDate}) async {
-    var path = '/movies/updates/id';
+    var path = '/shows/updates/id';
     if (startDate != null) {
       path = '$path/$startDate';
     }
@@ -88,30 +83,27 @@ class MoviesService {
     return jsonList.map((i) => i as int).toList();
   }
 
-  Future<Movie> get(String id) async {
-    final response = await _client.get('/movies/$id');
+  Future<Show> get(String id) async {
+    final response = await _client.get('/shows/$id');
     final Map<String, dynamic> raw = json.decode(response.body);
-    return Movie.fromJson(raw);
+    return Show.fromJson(raw);
   }
 
   Future<List<Alias>> aliases(String id) async {
-    final response = await _client.get('/movies/$id/aliases');
+    final response = await _client.get('/shows/$id/aliases');
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((alias) => Alias.fromJson(alias)).toList();
   }
 
-  Future<List<Release>> releases(String id, {String? country}) async {
-    var path = '/movies/$id/releases';
-    if (country != null) {
-      path = '$path/$country';
-    }
+  Future<List<Certification>> certifications(String id) async {
+    var path = '/shows/$id/certifications';
     final response = await _client.get(path);
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((release) => Release.fromJson(release)).toList();
+    return jsonList.map((cert) => Certification.fromJson(cert)).toList();
   }
 
   Future<List<Translation>> translations(String id, {String? language}) async {
-    var path = '/movies/$id/translations';
+    var path = '/shows/$id/translations';
     if (language != null) {
       path = '$path/$language';
     }
@@ -121,7 +113,7 @@ class MoviesService {
   }
 
   Future<List<Comment>> comments(String id, {String sort = 'newest'}) async {
-    final response = await _client.get('/movies/$id/comments/$sort');
+    final response = await _client.get('/shows/$id/comments/$sort');
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((release) => Comment.fromJson(release)).toList();
   }
@@ -131,50 +123,71 @@ class MoviesService {
     String type = 'all',
     String sort = 'popular',
   }) async {
-    final response = await _client.get('/movies/$id/lists/$type/$sort');
+    final response = await _client.get('/shows/$id/lists/$type/$sort');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((release) => list.List.fromJson(release)).toList();
+    return jsonList.map((l) => list.List.fromJson(l)).toList();
   }
 
   // TODO: People
+  // TODO: Collection progress
+  // TODO: Watched progress
+  // TODO: Reset watched progress
 
   Future<Ratings> ratings(String id) async {
-    final response = await _client.get('/movies/$id/ratings');
+    final response = await _client.get('/shows/$id/ratings');
     final Map<String, dynamic> raw = json.decode(response.body);
     return Ratings.fromJson(raw);
   }
 
-  Future<List<Movie>> related(String id) async {
-    final response = await _client.get('/movies/$id/related');
+  Future<List<Show>> related(String id) async {
+    final response = await _client.get('/shows/$id/related');
     final List<dynamic> jsonList = json.decode(response.body);
-    return jsonList.map((movie) => Movie.fromJson(movie)).toList();
+    return jsonList.map((show) => Show.fromJson(show)).toList();
   }
 
   Future<Stats> stats(String id) async {
-    final response = await _client.get('/movies/$id/stats');
+    final response = await _client.get('/shows/$id/stats');
     final Map<String, dynamic> raw = json.decode(response.body);
     return Stats.fromJson(raw);
   }
 
   Future<List<Network>> studios(String id) async {
-    final response = await _client.get('/movies/$id/studios');
+    final response = await _client.get('/shows/$id/studios');
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((studio) => Network.fromJson(studio)).toList();
   }
 
   Future<List<User>> watching(String id) async {
-    final response = await _client.get('/movies/$id/watching');
+    final response = await _client.get('/shows/$id/watching');
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((user) => User.fromJson(user)).toList();
   }
 
+  Future<Episode?> nextEpisode(String id) async {
+    final response = await _client.get('/shows/$id/next_episode');
+    if (response.body.isNotEmpty) {
+      final Map<String, dynamic> raw = json.decode(response.body);
+      return Episode.fromJson(raw);
+    }
+    return null;
+  }
+
+  Future<Episode?> lastEpisode(String id) async {
+    final response = await _client.get('/shows/$id/last_episode');
+    if (response.body.isNotEmpty) {
+      final Map<String, dynamic> raw = json.decode(response.body);
+      return Episode.fromJson(raw);
+    }
+    return null;
+  }
+
   Future<List<Video>> videos(String id) async {
-    final response = await _client.get('/movies/$id/videos');
+    final response = await _client.get('/shows/$id/videos');
     final List<dynamic> jsonList = json.decode(response.body);
     return jsonList.map((video) => Video.fromJson(video)).toList();
   }
 
   Future<void> refresh(String id) async {
-    await _client.post('/movies/$id/refresh');
+    await _client.post('/shows/$id/refresh');
   }
 }
